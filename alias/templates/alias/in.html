@@ -1,0 +1,12 @@
+{% extends "alias/layout.html" %}
+
+{% block body %}
+
+<h2>i am a {{user_}}</h2>
+
+<form action="{% url 'signout' %}" method="post">
+    {% csrf_token %}
+    <input type="submit" class="btn btn-primary" value="Logout">
+</form>
+
+{% endblock %}
