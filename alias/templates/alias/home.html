@@ -1,0 +1,120 @@
+{% extends "alias/layout.html" %}
+
+{% block body %}
+
+
+  <div class="container">
+    <div class="container">
+  <header class="border-bottom lh-1 py-3">
+    <div class="row flex-nowrap justify-content-between align-items-center">
+      <div class="col-4 pt-1">
+        <a class="link-secondary" href="#">mpesa+</a>
+      </div>
+      <div class="col-4 text-center">
+        <a class="blog-header-logo text-body-emphasis text-decoration-none" href="#">Mpesa-Alias</a>
+      </div>
+      <div class="col-4 d-flex justify-content-end align-items-center">
+        <a class="link-secondary" href="#" aria-label="options">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgb(0, 0, 0); --darkreader-inline-fill: #e8e6e3;" data-darkreader-inline-fill="">
+              <path d="M4 19h16v2H4zm5-4h11v2H9zm-5-4h16v2H4zm0-8h16v2H4zm5 4h11v2H9z"></path></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+  
+    <div class="nav-scroller py-1 mb-3 border-bottom">
+      <nav class="nav nav-underline justify-content-between">
+        <a class="btn btn-outline-primary" href="#">Mpesa-Alias</a>
+          
+        <a class="btn btn-outline-primary" href="#" data-bs-toggle="modal" data-bs-target="#createAlias">Create Alias</a>
+
+            <div class="modal fade" id="createAlias" tabindex="-1" aria-labelledby="createAliasLable" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="createAliasLable">creating Alias</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                        <div class="modal-body">
+                            <form action="{% url 'index' %}" id="mpesaForm" method="post">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="{{ mpesa_form.phone_num.id_for_label }}">original phone number</label>
+                                    <input type="number" class="form-control" id="{{ mpeasa_form.phone_num.id_for_label }}" name="{{ mpesa_form.phone_num.name }}" value="{{phone_num}}" placeholder="original number">
+                                    {{ mpesa_form.phone_num.errors }}
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="{{ mpesa_form.phone_num.id_for_label }}">Desired alias</label>
+                                    <input type="number" class="form-control" id="{{ mpeasa_form.phone_num.id_for_label }}" name="{{ mpesa_form.phone_num.name }}" value="" placeholder="my alias">
+                                    {{ mpesa_form.phone_num.errors }}
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary">create</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+      </nav>
+    </div>
+  </div>
+
+  <main class="container">
+    <!--this is the desktop view-->
+    <div class="row align-items-md-stretch">
+        <div class="col-md-6 mb-4">
+            <div class="h-100 p-3 rounded-3" style="background-color: red">
+              <h4>Alias <b>|</b> PrimaryAlias</h4>
+              <h2>Ksh 940</h2>
+              <p>Available</p>
+              <button class="btn btn-outline-light" type="button">Interact</button>
+            </div>
+        </div>
+
+        <!--if on desktop, place all of them on the bar-->
+        <div class="nav-scroller py-1 mb-3 border-bottom">
+            <nav class="nav nav-underline justify-content-between">
+              <a class="btn btn-outline-primary" href="#">send/request</a>
+              <a class="btn btn-outline-primary" href="#">lipa</a>
+                <a class="btn btn-outline-primary" href="#">withdraw</a>
+            </nav>
+        </div>
+
+        <div class="col-md-6 mb-4">
+          <div class="h-100 p-3 text-bg-dark rounded-3">
+            <h4>Alias <b>|</b> bigFish</h4>
+            <h2>Ksh 940</h2>
+            <p>Available</p>
+            <button class="btn btn-outline-light" type="button">Interact</button>
+          </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+          <div class="h-100 p-3 text-bg-dark rounded-3">
+            <h4>Alias <b>|</b> bigFish</h4>
+            <h2>Ksh 940</h2>
+            <p>Available</p>
+            <button class="btn btn-outline-light" type="button">Interact</button>
+          </div>
+        </div>
+    </div>
+    <!--end desktop view-->
+
+    <!--this is the phone view-->
+    <div class="p-4 p-md-5 mt-3 mb-4 rounded text-body-emphasis bg-body-secondary">
+        <div class="d-flex">
+            <div class="p-2 flex-fill"><button type="button" class="btn btn-primary">flex item</button></div>
+            <div class="p-2 flex-fill"><button type="button" class="btn btn-primary">flex item</button></div>
+            <div class="p-2 flex-fill"><button type="button" class="btn btn-primary">flex item</button></div>
+        </div>
+    </div>
+    <!--end phone view-->
+  </main>
+  
+  
+  
+
+{% endblock %}

@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.db import IntegrityError
 
 from dotenv import load_dotenv
@@ -21,6 +21,10 @@ supabase = create_client(url, key)
 def index(request):
     return render(request, "alias/index.html")
 
+def homePage(request):
+    return render(request, "alias/home.html")
+
+#@login_required(login_url='index')
 def inner(request):
     user_email = request.session.get('user_email', None)
     print(user_email)
@@ -41,7 +45,15 @@ def signin(request):
         #print(user_session.user)
         request.session["user_email"] = user_session.user.email
         print("================================================")
-        return HttpResponseRedirect(reverse("in"))        
+        next_url = request.build_absolute_uri()
+        print("-----------", next_url)
+
+        """
+        f next_url:
+            return HttpResponseRedirect(next_url)
+        else:
+        """
+        return HttpResponseRedirect(reverse("homePage"))   
     else:
         return render(request, "alias/login.html")
 
