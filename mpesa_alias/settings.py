@@ -19,8 +19,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-l5gs0pd0d$-t_bd#9&0n-e%1-v_=ub!^##n7s_hbib#wt&)aa_'
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = 'RENDER' not in os.environ
@@ -83,16 +82,6 @@ DATABASES = {
     }
 }
 """
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': 'iunXPly2b6ru8EZZ',
-        'HOST': 'db.rdzyqvweoprijawdusdh.supabase.co',
-        'PORT': '5432',  # Default PostgreSQL port
-    }
-}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

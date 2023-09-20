@@ -1,0 +1,92 @@
+{% extends "alias/layout.html" %}
+
+{% block body %}
+<h3>create your alias</h3><hr-4>
+{% if anyVerifiedNumbers %}
+{% else %}
+    <div class="alert alert-warning" role="alert">
+        <h4 class="alert-heading">No verified numbers</h4>
+        <p>You have no verified numbers, please verify a number to continue</p>
+    </div>
+{% endif %}
+
+
+<div class='d-grip gap-2 d-md-flex justify-content-md-end'>
+    <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#verifyDigits">
+        Verify
+    </button>
+    {% if anyVerifiedNumbers %}
+        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+            select verified number
+        </button>
+        <ul class="dropdown-menu">
+            {% for verifiednumber in data %}
+                <li><a class="dropdown-item" href="#" onclick="setSelectedNumber('{{ verifiednumber.theDigits }}')" >{{ verifiednumber.theDigits }}</a></li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+</div>
+
+    <form action="{% url 'createAlias' %}" enctype="multipart/form-data" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="{{ form.original_num.id_for_label }}">original number</label>
+            <input type="number" class="form-control" id="{{ form.original_num.id_for_label }}" name="{{ form.original_num.name }}" value="{{original_num}}" placeholder="select number from dropdown above 254123456789" readonly>
+            {{ form.original_num.errors }}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.desired_alias.id_for_label }}">Desired alias</label>
+            <input type="text" class="form-control" id="{{ form.desired_alias.id_for_label }}" name="{{ form.desired_alias.name }}" value="" placeholder="my desired alias">
+            {{ form.phone_num.errors }}
+            {% if messages %}
+            {% for message in messages %}
+            <ul>
+                <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+            </ul>
+            {% endfor %}
+            {% endif %}
+        </div>
+        
+        {% if anyVerifiedNumbers %}
+            <button type="submit" class="btn btn-primary">create</button>
+        {% else %}
+            <button type="submit" class="btn btn-primary" disabled>create</button>
+        {% endif %}
+    </form>
+
+
+    <div class="modal fade" id="verifyDigits" tabindex="-1" aria-labelledby="verifyDigitsLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="mpesaModalLabel">verify</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{% url 'verifyDigits' %}" id="verifyForm" method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="number" class="form-control" id="phone_num" name="phone_num" placeholder="254123456789">
+    
+                            <label>verificationAmount</label>
+                            <input type="number" class="form-control" id=verificationAmount name="verificationAmount" value=1 placeholder="1" readonly>
+    
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">Verify</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function setSelectedNumber(number){
+            document.getElementById('{{ form.original_num.id_for_label }}').value = number;
+        }
+    </script>
+{% endblock %}

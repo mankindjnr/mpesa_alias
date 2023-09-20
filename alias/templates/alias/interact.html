@@ -1,0 +1,57 @@
+{% extends "alias/layout.html" %}
+
+{% block body %}
+{% include "alias/header.html" %}
+    <div class="container px-4 py-1" id="icon-grid">
+        <div class='d-grip gap-2 d-md-flex justify-content-md-start mb-2 pb-2 border-bottom'>
+                <button class="btn btn-secondary btn-sm" type="button">all time sent</button>
+                <button class="btn btn-secondary btn-sm" type="button">KSH.{{ total_sent }}</button>
+        </div>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+    
+        {% if sent %}
+        {% for transaction in sent %}
+            <div class="col d-flex align-items-start p-3 mb-2 mt-4 text-bg-dark rounded-4" style="margin: 10px; padding: 10px;">
+                <div>
+                    <p class="fw-bold mb-2 fs-5">to: {{transaction.receiver }}</p>
+                    <p><b>Ksh</b> {{transaction.amount}} </p>
+                    <p> <b>time:</b>{{transaction.sent_at }} </p>
+                </div>
+            </div>
+        {% endfor %}
+        {% else %}
+        <div class="h-100 p-3 text-bg-dark rounded-3">
+            <h3>No transactions yet</h3>
+            </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!---------------------split in left and right section in both devices------------------------------------------>
+    <div class="container px-4 py-5 mb-3" id="icon-grid">
+        <div class='d-grip gap-2 d-md-flex justify-content-md-start mb-2 pb-2 border-bottom'>
+            <button class="btn btn-secondary btn-sm" type="button">all time received</button>
+            <button class="btn btn-secondary btn-sm" type="button">KSH.{{ total_received }} </button>
+        </div>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 py-5">
+    
+        {% if received %}
+        {% for transaction in received %}
+            <div class="col d-flex align-items-start my-1 p-3 mb-2 rounded-4" style="background-color: rgb(214, 198, 198); margin: 10px;">
+                <div>
+                    <p class="fw-bold mb-2 fs-5">from: {{transaction.sender }}</p>
+                    <p><b>Ksh</b> {{transaction.amount}} </p>
+                    <p> <b>time:</b>{{transaction.sent_at }}</p>
+                </div>
+            </div>
+        {% endfor %}
+        {% else %}
+        <div class="h-100 p-3 text-bg-dark rounded-3">
+            <h3>No transactions yet</h3>
+            </div>
+        {% endif %}
+      </div>
+    </div>
+    
+{% endblock %}
+

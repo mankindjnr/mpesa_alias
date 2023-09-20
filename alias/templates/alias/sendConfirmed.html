@@ -1,7 +1,7 @@
 {% extends "alias/layout.html" %}
 
 {% block head %}
-    <meta http-equiv="refresh" content="7;url={% url 'index' %}">
+    <!--<meta http-equiv="refresh" content="7;url={% url 'homePage' %}">-->
 {% endblock %}
 
 {% block body %}
@@ -9,22 +9,18 @@
         <div class="modal-dialog" role="document">
         <div class="modal-content rounded-4 shadow">
             <div class="modal-header border-bottom-0">
-            <h1 class="modal-title fs-5">Confirmation page</h1>
+            <h1 class="modal-title fs-5">Money Sent</h1>
             </div>
             <div class="modal-body py-0">
-            <p>please check your email and click on the link to activate your Alias account</p>
+            <p>Ksh {{ amount }} has been sent to {{ aliasName }}<hr-5>
+            <em>click DONE to go home</em></p>
             </div>
             <div class="modal-footer flex-column align-items-stretch w-100 gap-2 pb-3 border-top-0">
-            <a type="button" class="btn btn-lg btn-primary" href="{% url 'index' %}">Go Home</a>
+            <a type="button" class="btn btn-lg btn-success" href="{% url 'transactionDone' %}">DONE</a>
             </div>
         </div>
         </div>
     </div>
-
-    <script>
-        //window.history.replaceState({}, document.title, "/" + "index");
-        window.history.replaceState({}, document.title, "/"); 
-    </script>
 {% endblock %}
 
 
