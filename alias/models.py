@@ -10,8 +10,7 @@ class supaProfile(models.Model):
 
 class aliases(models.Model):
     alias_owner = models.ForeignKey(supaProfile, on_delete=models.CASCADE)
-    cipher = b'gAAAAABlB_WP4CcWffimmVUMpygEbXfKGTVWW_DSlU8UOp6R-lveTUxenZTzKOExb1J_Gcikz3mT8OEFQJUsIcSIuXZtsAXRWg=='
-    num_cipher = models.BinaryField(default=cipher)
+    num_cipher = models.BinaryField(default=None)
     email = models.EmailField()
     desired_alias = models.CharField(unique=True, db_index=True)
     created_on = models.DateTimeField()
@@ -24,8 +23,8 @@ class lockAndKey(models.Model):
     created_on = models.DateTimeField()
 
 class aliasTransactions(models.Model):
-    sender = models.CharField()
-    receiver = models.CharField()
+    sender = models.CharField(max_length=255)
+    receiver = models.CharField(max_length=255)
     amount = models.IntegerField()
     transaction_completed = models.BooleanField(default=False)
     transaction_identifier = models.CharField(default="wc5f2_97ef1ea3a82e752b")
