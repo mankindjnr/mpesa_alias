@@ -19,7 +19,7 @@
           <ul class="navbar-nav flex-grow-1 justify-content-end">
             <li class="nav-item"><a class="nav-link" href="#">
             </a></li>
-            <li class="nav-item"><a class="nav-link" href="{url 'index' }">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'index' %}">Home</a></li>
             {% if home %}
             <li class="nav-item"><a class="nav-link" href="{% url 'signin' %}">Login</a></li>
             {% else %}
@@ -43,7 +43,8 @@
       <h2 class="display-4 fw-normal">Designed for privacy</h2>
       <h3 class="fw-normal text-muted mb-3">Securely Transact, Privately Connect</h3>
       <p class="lead my-3">Create an alias for your line and transact privately, everywhere</p>
-      <a type="button" class="btn btn-success btn-sm">create an alias account</a>
+      <a type="button" class="btn btn-success" href="{% url 'signup' %}" >create an alias account</a>
+      <a type="button" class="btn btn-success" href="{% url 'signin' %}" >Login</a>
     </div>
   </div>
 
