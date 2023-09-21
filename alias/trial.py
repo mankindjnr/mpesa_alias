@@ -1,3 +1,3 @@
-import uuid
+num = "071234567890"
 
-print(uuid.uuid4())
+print(num[0:1])

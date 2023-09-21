@@ -19,13 +19,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-
+# SECURITY WARNING: keep the secret key used in production secret!
+#SECRET_KEY = 
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = 'RENDER' not in os.environ
 
-# ALLOWED_HOSTS = ['alias.onrender.com']
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['alias.onrender.com']
+#ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -82,6 +83,16 @@ DATABASES = {
     }
 }
 """
+DATABASES = {
+    'default': {
+        'ENGINE': ',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': ,
+        'HOST': ',
+        'PORT': '',  # Default PostgreSQL port
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

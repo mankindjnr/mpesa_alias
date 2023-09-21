@@ -5,7 +5,7 @@ import base64
 from django.http import JsonResponse
 from .generateAccessToken import get_access_token
 
-def stk_push(request, theDigits, organization):
+def stk_push(request, theDigits, organization, amount):
     print("iside stkpus")
     access_token_response = get_access_token(request)
     if isinstance(access_token_response, JsonResponse):
@@ -16,7 +16,7 @@ def stk_push(request, theDigits, organization):
         if access_token:
             print(type(theDigits))
             print("inside access token")
-            amount = 1
+            amount = int(amount)
             the_org = str(organization)
             print("------thedigits:", the_org)
             phone = "254720090889",

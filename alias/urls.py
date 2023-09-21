@@ -7,10 +7,11 @@ urlpatterns = [
     path('verifyDigits', views.verifyDigits, name="verifyDigits"),
     path('confirmedDigits', views.confirmedDigits, name="confirmedDigits"),
     path('sendToAlias', views.sendToAlias, name="send"),
+    path('sendToOriginal',views.sendToOriginal, name="sendtooriginal"),
     path('transactionDone', views.transactionDone, name="transactionDone"),
     path('sendForm', views.sendForm, name="sendForm"),
     path('interact/<str:the_alias>', views.interact, name="interact"),
-    path('stk/<theDigits>/<organization>', views.stk_push, name="stk"),
+    path('stk/<theDigits>/<organization>/<amount>', views.stk_push, name="stk"),
     path('tokenaccess', views.get_access_token, name="tokenaccess"),
     path('query/<checkoutid>', views.query_stk_status, name="query"),
     #---------------------------------------------

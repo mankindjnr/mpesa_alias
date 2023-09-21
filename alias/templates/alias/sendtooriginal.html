@@ -1,0 +1,56 @@
+{% extends "alias/layout.html" %}
+
+{% block body %}
+
+<div class="h-100 p-3 mt-4 rounded-3" style="background-color: rgb(5, 117, 5)">
+    <form action="{% url 'sendtooriginal' %}" method="post">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <div class='d-grip gap-2 d-md-flex justify-content-md-end'>
+                {% if aliases %}
+                    <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        choose an alias
+                    </button>
+                    <ul class="dropdown-menu">
+                        {% for alias in aliases %}
+                            <li><a class="dropdown-item" href="#" onclick="setSelectedAlias('{{ alias.desired_alias }}')" >{{ alias.desired_alias }}</a></li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            
+            </div>
+            <label for="sendingAlias">sending From:</label>
+            <input type="text" name="sendingAlias" class="form-control" id="sendingAlias" required>
+        </div>
+
+        <div class="form-group">
+            <label for="alias">number to send to:</label>
+            <input type="text" name="recipientNumber" class="form-control" id="recipientNumber" required>
+        </div>
+
+        <div class="form-group">
+            <label for="amount">amount</label>
+            <input type="number" name="amount" class="form-control" id="amount" required>
+        </div>
+
+        <input type="submit" class="btn btn-outline-dark" value="Send">
+    </form>
+</div>
+
+<script>
+    function setSelectedAlias(alias){
+        document.getElementById('sendingAlias').value = alias;
+    }
+
+    /*
+    we can use to detect if the alias exists in realtime, store all of them in a list and use it as the source
+    $(function() {
+        $( "#recipientAlias" ).autocomplete({
+            //source: ["{{ aliases }}"]
+            source : ['option1', 'option2', 'option3' ]
+        });
+    });
+    */
+</script>
+{% endblock %}

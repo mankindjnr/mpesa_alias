@@ -35,29 +35,87 @@ def homePage(request):
     current_user_email = request.session.get("user_email", None)
     all_aliases  = supabase.table("alias_aliases").select("desired_alias").eq("email", current_user_email).execute()
     my_aliases = all_aliases.data
-    print(my_aliases)
     
-    # -------------retrieving the latest sent successful transaction---using largest id-------------------------
+    # -------------retrieving the latest sent successful transaction---using largest id-(search for a better way)------------------------
+    latest_sent = False
     latest_sent_transaction_ids = []
     for alias in my_aliases:
         sent_transaction_ids = supabase.table("alias_aliastransactions").select("id").eq("sender", alias['desired_alias']).eq("transaction_completed", True).execute()
         sent_transaction_ids = sent_transaction_ids.data
+
         if sent_transaction_ids:
             largest_id = max(sent_transaction_ids, key=lambda x: x['id'])
+            print("largest---", largest_id)
             dictionary = {alias['desired_alias']: largest_id['id']}
             latest_sent_transaction_ids.append(dictionary)
+    
     count = 0
+    transactions_ids_keys = []
+    for transactions_id in latest_sent_transaction_ids:
+        keys = transactions_id.keys()
+        transactions_ids_keys.extend(keys)
+
+
+    transacted_aliasses = []
+
+    for alias in my_aliases:
+        aliasKey = list(alias.values())[0]
+        if aliasKey in transactions_ids_keys:
+            transacted_aliasses.append(alias)
+
+    latest_sent_transaction = []
     if len(latest_sent_transaction_ids) > 0:
         for latest_id in latest_sent_transaction_ids:
-                print()
-                desired_alias = my_aliases[count]['desired_alias']
+                desired_alias = transacted_aliasses[count]['desired_alias']
                 count += 1
-                # get settings back and run it again:
-                
-                latest_sent_transaction_obj = supabase.table("alias_aliastransactions").select("receiver, amount").eq("id", latest_id[desired_alias]).eq("transaction_completed", True).execute()
-                print(latest_sent_transaction_obj.data)
+                latest_sent_transaction_obj = supabase.table("alias_aliastransactions").select("receiver, amount, sender").eq("id", latest_id[desired_alias]).eq("transaction_completed", True).execute()
+                latest_sent_transaction.append(latest_sent_transaction_obj.data[0])
+    
+    if len(latest_sent_transaction) > 0:
+        latest_sent = latest_sent_transaction
+    
+    #----------------------------latest received transactions---------(search for a better way-----------------------------
+    latest_received = False
+    latest_received_transaction_ids = []
+    for alias in my_aliases:
+        received_transaction_ids = supabase.table("alias_aliastransactions").select("id").eq("receiver", alias['desired_alias']).eq("transaction_completed", True).execute()
+        received_transaction_ids = received_transaction_ids.data
+        if received_transaction_ids:
+            largest_id = max(received_transaction_ids, key=lambda x: x['id'])
+            dictionary = {alias['desired_alias']: largest_id['id']}
+            latest_received_transaction_ids.append(dictionary)
+    
+    count = 0
+    received_transactions_ids_keys = []
+    for transactions_id in latest_received_transaction_ids:
+        keys = transactions_id.keys()
+        received_transactions_ids_keys.extend(keys)
+
+    transacted_aliases = []
+
+    for alias in my_aliases:
+        aliasKey = list(alias.values())[0]
+        if aliasKey in received_transactions_ids_keys:
+            transacted_aliases.append(alias)
+
+    latest_received_transaction = []
+    if len(latest_received_transaction_ids) > 0:
+        for latest_id in latest_received_transaction_ids:
+                desired_alias = transacted_aliases[count]['desired_alias']
+                count += 1
+                latest_received_transaction_obj = supabase.table("alias_aliastransactions").select("receiver, amount, sender").eq("id", latest_id[desired_alias]).eq("transaction_completed", True).execute()
+
+                latest_received_transaction.append(latest_received_transaction_obj.data[0])
+    
+    if len(latest_received_transaction) > 0:
+        latest_received = latest_received_transaction
+        print("----received---", latest_received_transaction)
+    # -------------------------end of latest sent-----------------------------------------
+
     return render(request, "alias/home.html",{
-        "aliases": my_aliases
+        "aliases": my_aliases,
+        "latest_sent": latest_sent,
+        "latest_received": latest_received
     })
 # ====================================================================================
 def createAliasForm(request):
@@ -100,7 +158,8 @@ def verifyDigits(request):
         verified.save()
         #assuming the everything is okay we will send the stk push and render the waiting page
         organization = "VERIFY-ALIAS"
-        verificationResp = stk_push(request, theDigits, organization)
+        amount = 1
+        verificationResp = stk_push(request, theDigits, organization, amount)
         
         # ---------------verification check--------------------------")
         response_data = json.loads(verificationResp.content)
@@ -264,7 +323,7 @@ def sendToAlias(request):
         # to send you will need the senders number to send the stkpush and the receivers alias to receive
         # at the moment, since the receivercan see the money, their part will be replaced by the till number
         # later that we will add the original receiver in place of the current till
-        sending_record = stk_push(request, original_sender, recipientAlias)
+        sending_record = stk_push(request, original_sender, recipientAlias, amount)
 
         sent_record_data = json.loads(sending_record.content)
         sent_checkOutId = sent_record_data.get('CheckoutRequestID')
@@ -294,6 +353,83 @@ def sendToAlias(request):
         response['Pragma'] = 'no-chache'
 
         return response
+#-------handles the transaction from an alias to a non alias(original number)-------
+def sendToOriginal(request):
+    if request.method == "POST":
+        sendingAlias = request.POST['sendingAlias']
+        recipientNumber = request.POST['recipientNumber']
+        amount = request.POST['amount']
+
+        #later, confirm if the number is legit a safaricom number by sending an stkpush, if its a success:
+        # making sure the number is 2547123456789 if number is 071234567890 we will replace the 0 with a 254
+        if len(recipientNumber) == 10 and recipientNumber[0:1] == '0':
+            recipientNumber = "254" + recipientNumber[1:]
+        print()
+        print(recipientNumber)
+        print()
+        # --------decrypting the sending alias---------------------------------------
+        encrypted_sender = supabase.table("alias_aliases").select("num_cipher").eq("desired_alias", sendingAlias).execute()
+
+        # ---------------------retrieving the sending cipher-----------------------------------
+        sender_cypher_hex = encrypted_sender.data[0]['num_cipher']
+        sender_cypher = binascii.unhexlify(sender_cypher_hex.replace("\\x", ""))
+
+        # ----------------retrieving the cipher rsa of sender-----------------
+        senderslocksandkeys = supabase.table("alias_lockandkey").select("keysAES, keysPrivate").eq("designated_alias", sendingAlias).execute()
+        sendersaesKeys = binascii.unhexlify(senderslocksandkeys.data[0]['keysAES'].replace("\\x", ""))
+
+        #-----------------retrieving serialized key for sender------
+        senderserial = senderslocksandkeys.data[0]['keysPrivate']
+        senderserial_binary = binascii.unhexlify(senderserial.replace('\\x', ''))
+        # --------------------------------deserialize-----------------------------------------
+        sender_deserialized_key = deserials(senderserial_binary)
+
+        senders_decryptObject = {
+            "privateKeys": sender_deserialized_key,
+            "rsaCipher": sendersaesKeys,
+            "theCipher": sender_cypher
+        }
+
+        original_sender = decryptNumber(senders_decryptObject)
+        sending_record = stk_push(request, original_sender, recipientNumber,amount)
+
+        sent_record_data = json.loads(sending_record.content)
+        sent_checkOutId = sent_record_data.get('CheckoutRequestID')
+        transaction_identifier = sent_checkOutId
+
+        # instead of storing the users phone number, we will encrypt it and store its encryption
+        # for now we keep it as so for ease, their number will be their alias since they are not alias members
+        transact = aliasTransactions(
+            sender = sendingAlias,
+            receiver = recipientNumber,
+            amount = amount,
+            transaction_completed=False,
+            transaction_identifier=transaction_identifier,
+            sent_at=datetime.now()
+        )
+
+        transact.save()
+
+        # store the uuid of the transaction in a ssession, use it to mark if it completed or not
+        request.session['transaction_identifier'] = transaction_identifier
+
+        response =  render(request, "alias/sendConfirmed.html",{
+            "aliasName": recipientNumber,
+            "amount": amount
+            # i can use this in the upcoming page to send an email to recipient email including sender
+        })
+
+        response['Cache-Control'] = 'no-store, max-age=0'
+        response['Pragma'] = 'no-chache'
+
+        return response
+    else:
+        current_user_email = request.session.get("user_email", None)
+        aliases = supabase.table("alias_aliases").select("desired_alias").eq("email", current_user_email).execute()
+        my_aliases = aliases.data
+        return render(request, "alias/sendtooriginal.html",{
+            "aliases": my_aliases
+        })
 # ------------------------------trnsaction done---------------------------------------
 # we can also make this a background process, since we have the checkout id for the transaction
 # we can check it even five minutes after, thats if the use doesn't click on this url
@@ -343,9 +479,11 @@ def interact(request, the_alias):
 
     if len(sent_object.data) > 0:
         sent = sent_object.data
+        sent.reverse()
 
     if len(received_object.data) > 0:
         received = received_object.data
+        received.reverse()
 
     return render(request, "alias/interact.html", {
         "alias": the_alias,
