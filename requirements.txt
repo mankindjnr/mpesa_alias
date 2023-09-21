@@ -22,7 +22,7 @@ pydantic==2.3.0
 pydantic_core==2.6.3
 python-dateutil==2.8.2
 python-dotenv
-realtime==1.0.0
+realtime
 requests==2.31.0
 six==1.16.0
 sniffio==1.3.0
