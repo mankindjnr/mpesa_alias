@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv(django_secret_key)
+SECRET_KEY = os.environ.get("django_secret")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = 'RENDER' not in os.environ
@@ -83,14 +83,15 @@ DATABASES = {
     }
 }
 """
+os.environ.get("supabase_url")
 DATABASES = {
     'default': {
-        'ENGINE': os.getenv(engine),
+        'ENGINE': os.environ.get("engine"),
         'NAME': 'postgres',
         'USER': 'postgres',
-        'PASSWORD': os.getenv(db_password),
-        'HOST': os.getenv(db_host),
-        'PORT': os.getenv(db_port),  # Default PostgreSQL port
+        'PASSWORD': os.environ.get("db_password"),
+        'HOST': os.environ.get("db_host"),
+        'PORT': os.environ.get("db_port")  # Default PostgreSQL port
     }
 }
 
