@@ -21,7 +21,7 @@ pycparser==2.21
 pydantic==2.3.0
 pydantic_core==2.6.3
 python-dateutil==2.8.2
-python-dotenv==1.0.0
+python-dotenv
 realtime==1.0.0
 requests==2.31.0
 six==1.16.0
