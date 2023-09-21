@@ -20,10 +20,13 @@
     <title>alias</title>
 </head>
 <body>
+    {% block navbar %}
+    {% endblock %}
     <div class="container">
     {% block body %}
     {% endblock %}
     </div>
-
+    {% block footer %}
+    {% endblock %}
 </body>
 </html>

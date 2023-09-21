@@ -29,7 +29,9 @@ supabase = create_client(url, key)
 
 # Create your views here.
 def index(request):
-    return render(request, "alias/index.html")
+    return render(request, "alias/index.html",{
+        "home": True
+    })
 
 def homePage(request):
     current_user_email = request.session.get("user_email", None)

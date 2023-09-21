@@ -1,6 +1,94 @@
 {% extends "alias/layout.html" %}
 
+{% block navbar %}
+<nav class="navbar navbar-expand-md bg-dark sticky-top border-bottom" data-bs-theme="dark">
+    <div class="container">
+      <a class="navbar-brand d-md-none" href="#">
+        <svg class="bi" width="24" height="24"><use xlink:href="#aperture"/></svg>
+        Mpesa-alias
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas" aria-controls="#offcanvas" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="offcanvas offcanvas-end" tabindex="-1" id="#offcanvas" aria-labelledby="#offcanvasLabel">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title" id="#offcanvasLabel">Mpesa-alias</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+          <ul class="navbar-nav flex-grow-1 justify-content-end">
+            <li class="nav-item"><a class="nav-link" href="#">
+            </a></li>
+            <li class="nav-item"><a class="nav-link" href="{url 'index' }">Home</a></li>
+            {% if home %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'signin' %}">Login</a></li>
+            {% else %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'signout' %}">Logout</a></li>
+            {% endif %}
+            <li class="nav-item"><a class="nav-link" href="{url 'about' }">About</a></li>
+            </a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+  {% endblock %}
+  
 {% block body %}
-{% include "alias/header.html" %}
+
+<div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-body-tertiary">
+  <div class="p-4 p-md-5 mb-4 rounded text-body-emphasis bg-body-secondary">
+    <div class="col-lg-6 px-0">
+      <h1 class="display-4 fst-italic">Mpesa-Alias</h1>
+      <h2 class="display-4 fw-normal">Designed for privacy</h2>
+      <h3 class="fw-normal text-muted mb-3">Securely Transact, Privately Connect</h3>
+      <p class="lead my-3">Create an alias for your line and transact privately, everywhere</p>
+      <a type="button" class="btn btn-success btn-sm">create an alias account</a>
+    </div>
+  </div>
+
+  <div class="d-md-flex flex-md-equal w-100 my-md-3 ps-md-3">
+    <div class="text-bg-dark me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
+      <div class="my-3 py-3">
+        <h2 class="display-5">Private Transactions Made Easy</h2>
+        <p class="lead">Safely and privately transact online in Kenya with our trusted platform.</p>
+      </div>
+      <div class="bg-body-tertiary shadow-sm mx-auto" style="width: 80%; height: 100px; border-radius: 21px 21px 0 0;"></div>
+    </div>
+
+    <div class="bg-body-tertiary me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
+      <div class="my-3 p-3">
+        <h2 class="display-5">Your Privacy, Our Priority</h2>
+        <p class="lead">We're dedicated to safeguarding your personal information and transactions.</p>
+      </div>
+      <div class="bg-dark shadow-sm mx-auto" style="width: 80%; height: 100px; border-radius: 21px 21px 0 0;"></div>
+    </div>
+  </div>
 
 {% endblock %}
+
+{% block footer %}
+
+<footer class="container py-5">
+    <div class="row">
+      <div class="col-12 col-md">
+        <small class="d-block mb-3 text-body-secondary">&copy; 2023-2023</small>
+      </div>
+      <div class="col-6 col-md">
+        <h5>Resources</h5>
+        <ul class="list-unstyled text-small">
+          <li><a class="link-secondary text-decoration-none" href="{% url 'index' %}">about</a></li>
+          <li><a class="link-secondary text-decoration-none" href="#">mpesa developer</a></li>
+        </ul>
+      </div>
+      <div class="col-6 col-md">
+        <h5>About</h5>
+        <ul class="list-unstyled text-small">
+          <li><a class="link-secondary text-decoration-none" href="https://github.com/mankindjnr">Team</a></li>
+          <li><a class="link-secondary text-decoration-none" href="#">Privacy</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+  <script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}  

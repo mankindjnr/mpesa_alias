@@ -12,12 +12,12 @@ class aliases(models.Model):
     alias_owner = models.ForeignKey(supaProfile, on_delete=models.CASCADE)
     num_cipher = models.BinaryField(default=None)
     email = models.EmailField()
-    desired_alias = models.CharField(unique=True, db_index=True)
+    desired_alias = models.CharField(max_length=255, unique=True, db_index=True)
     created_on = models.DateTimeField()
 
 class lockAndKey(models.Model):
     keysOwner = models.ForeignKey(supaProfile, on_delete=models.CASCADE)
-    designated_alias = models.CharField(unique=True, default="alias0")
+    designated_alias = models.CharField(max_length=255, unique=True, default="alias0")
     keysAES = models.BinaryField()
     keysPrivate = models.BinaryField()
     created_on = models.DateTimeField()
@@ -27,7 +27,7 @@ class aliasTransactions(models.Model):
     receiver = models.CharField(max_length=255)
     amount = models.IntegerField()
     transaction_completed = models.BooleanField(default=False)
-    transaction_identifier = models.CharField(default="wc5f2_97ef1ea3a82e752b")
+    transaction_identifier = models.CharField(max_length=255, default="wc5f2_97ef1ea3a82e752b")
     sent_at = models.DateTimeField()
 
 class verifiedDigits(models.Model):
