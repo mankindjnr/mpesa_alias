@@ -3,6 +3,7 @@ import json
 import binascii
 import re
 from django import forms
+from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -27,7 +28,6 @@ url = os.environ.get("supabase_url")
 key = os.environ.get("supabase_key")
 supabase = create_client(url, key)
 
-# Create your views here.
 def index(request):
     return render(request, "alias/index.html",{
         "home": True
@@ -274,6 +274,18 @@ def sendToAlias(request):
         recipientAlias = request.POST["recipientAlias"]
         amount = request.POST["amount"]
 
+        # --------------------checking if the alias exists------------------------------
+        existing_recipients = supabase.table("alias_aliases").select('desired_alias').execute()
+        print("----------------existing alias")
+        existing_aliases = []
+        for existalias in existing_recipients.data:
+            existing_aliases.append(existalias['desired_alias'])
+        
+        if recipientAlias not in existing_aliases:
+            messages.success(request, "This alias doesn't exist")
+            return redirect('sendForm')
+        print()
+
         #------------------------retrieve ciphers and decrypt--------------------------
         # WE ARE SENDING TO AN ALIAS FROM AN ALIAS
         encrypted_sender = supabase.table("alias_aliases").select("num_cipher").eq("desired_alias", senderAlias).execute()
@@ -323,8 +335,8 @@ def sendToAlias(request):
         original_sender = decryptNumber(senders_decryptObject)
         # here is where i will call the stkpush function
         # to send you will need the senders number to send the stkpush and the receivers alias to receive
-        # at the moment, since the receivercan see the money, their part will be replaced by the till number
-        # later that we will add the original receiver in place of the current till
+        # at the moment, since the receivercan see the money, their part will be replaced by the sandbox till number
+        # later when the paybill application is done that we will add the original receiver in place of the current till
         sending_record = stk_push(request, original_sender, recipientAlias, amount)
 
         sent_record_data = json.loads(sending_record.content)
@@ -342,7 +354,7 @@ def sendToAlias(request):
 
         transact.save()
 
-        # store the uuid of the transaction in a ssession, use it to mark if it completed or not
+        # store the uuid of the transaction in a ssession, use it to check if it completed or not
         request.session['transaction_identifier'] = transaction_identifier
 
         response =  render(request, "alias/sendConfirmed.html",{
@@ -434,7 +446,7 @@ def sendToOriginal(request):
         })
 # ------------------------------trnsaction done---------------------------------------
 # we can also make this a background process, since we have the checkout id for the transaction
-# we can check it even five minutes after, thats if the use doesn't click on this url
+# we can check it even five minutes after, thats if the user doesn't click on the DOne url
 def transactionDone(request):
     checkoutId = request.session.get("transaction_identifier", None)
     queryresponse = query_stk_status(request, checkoutId)
@@ -457,6 +469,7 @@ def transactionDone(request):
         # else: redirect to the createalias/verify page with a message of failed - wipe it of the history
 
     return HttpResponseRedirect(reverse('homePage'))
+# ---------------send email to the receiver if the transaction is done---------------------------------
 
 # -------------------------------------------------------------------------------------
 def interact(request, the_alias):

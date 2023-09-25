@@ -1,37 +1,25 @@
 {% extends "alias/layout.html" %}
 
 {% block navbar %}
-<nav class="navbar navbar-expand-md bg-dark sticky-top border-bottom" data-bs-theme="dark">
-    <div class="container">
-      <a class="navbar-brand d-md-none" href="#">
-        <svg class="bi" width="24" height="24"><use xlink:href="#aperture"/></svg>
-        Mpesa-alias
+  <div class="container sticky-top border-bottom bg-body-secondary">
+    <header class="d-flex flex-wrap justify-content-center py-2 mb-2">
+      <a href="{% url 'index' %}" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+        <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
+        <span><h6>Mpesa-Alias</h6></span>
       </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas" aria-controls="#offcanvas" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="offcanvas offcanvas-end" tabindex="-1" id="#offcanvas" aria-labelledby="#offcanvasLabel">
-        <div class="offcanvas-header">
-          <h5 class="offcanvas-title" id="#offcanvasLabel">Mpesa-alias</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-          <ul class="navbar-nav flex-grow-1 justify-content-end">
-            <li class="nav-item"><a class="nav-link" href="#">
-            </a></li>
-            <li class="nav-item"><a class="nav-link" href="{% url 'index' %}">Home</a></li>
-            {% if home %}
-            <li class="nav-item"><a class="nav-link" href="{% url 'signin' %}">Login</a></li>
-            {% else %}
-            <li class="nav-item"><a class="nav-link" href="{% url 'signout' %}">Logout</a></li>
-            {% endif %}
-            <li class="nav-item"><a class="nav-link" href="{url 'about' }">About</a></li>
-            </a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </nav>
+
+      <ul class="nav nav-pills">
+        <li class="nav-item"><a class="nav-link" href="#"></a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'index' %}">Home</a></li>
+        {% if home %}
+        <li class="nav-item"><a class="nav-link" href="{% url 'signin' %}">Login</a></li>
+        {% else %}
+        <li class="nav-item"><a class="nav-link" href="{% url 'signout' %}">Logout</a></li>
+        {% endif %}
+        <li class="nav-item"><a class="nav-link" href="https://github.com/mankindjnr">github</a></li>
+      </ul>
+    </header>
+  </div>
   {% endblock %}
   
 {% block body %}
@@ -78,8 +66,8 @@
       <div class="col-6 col-md">
         <h5>Resources</h5>
         <ul class="list-unstyled text-small">
-          <li><a class="link-secondary text-decoration-none" href="{% url 'index' %}">about</a></li>
-          <li><a class="link-secondary text-decoration-none" href="#">mpesa developer</a></li>
+          <li><a class="link-secondary text-decoration-none" href="https://github.com/mankindjnr">github</a></li>
+          <li><a class="link-secondary text-decoration-none" href="https://developer.safaricom.co.ke/">mpesa developer</a></li>
         </ul>
       </div>
       <div class="col-6 col-md">

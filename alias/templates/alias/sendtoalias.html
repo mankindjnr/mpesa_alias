@@ -21,12 +21,19 @@
             
             </div>
             <label for="senderAlias">sending From:</label>
-            <input type="text" name="senderAlias" class="form-control" id="senderAlias" required>
+            <input type="text" name="senderAlias" class="form-control" id="senderAlias" required placeholder="choose alias from dropdown" readonly>
         </div>
 
         <div class="form-group">
             <label for="alias">alias to send to:</label>
             <input type="text" name="recipientAlias" class="form-control" id="recipientAlias" required>
+            {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-danger" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+            {% endif %}
         </div>
 
         <div class="form-group">
