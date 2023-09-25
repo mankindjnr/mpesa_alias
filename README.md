@@ -17,7 +17,6 @@ Mpesa Alias is a web application that uses mpesa API to create aliases for your 
 <li>Query your transactions</li>
 </ul>
 
-When you receive money, you will receive a notification email. You can also query your transactions to see your transaction history.
 To query your transactions on a certain alias, login and click on your alias banner. You will be redirected to a page with your transactions.
 
 <footer>Mpesa +</footer>
