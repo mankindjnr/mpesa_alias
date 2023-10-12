@@ -20,12 +20,11 @@ from .generateAccessToken import get_access_token
 from .querystkstatus import query_stk_status
 from .stkpush import stk_push
 
-from dotenv import load_dotenv
-load_dotenv()
+from decouple import config
 from supabase import create_client
 
-url = os.environ.get("supabase_url")
-key = os.environ.get("supabase_key")
+url = config("SUPABASE_URL")
+key = config("SUPABASE_KEY")
 supabase = create_client(url, key)
 
 def index(request):

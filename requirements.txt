@@ -22,6 +22,7 @@ pycparser==2.21
 pydantic==2.3.0
 pydantic_core==2.6.3
 python-dateutil==2.8.2
+python-decouple==3.8
 python-dotenv==1.0.0
 realtime==1.0.0
 requests==2.31.0
@@ -35,3 +36,4 @@ supafunc==0.2.3
 typing_extensions==4.7.1
 urllib3==2.0.4
 websockets==10.4
+whitenoise==6.6.0
