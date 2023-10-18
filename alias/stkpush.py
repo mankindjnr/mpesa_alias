@@ -3,24 +3,31 @@ from datetime import datetime
 import json
 import base64
 from django.http import JsonResponse
+from decouple import config
 from .generateAccessToken import get_access_token
 
+CONSUMER_KEY = config('CONSUMER_KEY')
+CONSUMER_SECRET = config('CONSUMER_SECRET')
+PASSKEY = config('PASSKEY')
+
 def stk_push(request, theDigits, organization, amount):
-    print("iside stkpus")
+    print("inside stkpush")
+    print()
     access_token_response = get_access_token(request)
     if isinstance(access_token_response, JsonResponse):
         print("inside instance")
+        print(access_token_response)
         access_token = access_token_response.content.decode('utf-8')
         access_token_json = json.loads(access_token)
         access_token = access_token_json.get('access_token')
+
         if access_token:
             print(type(theDigits))
             print("inside access token")
             amount = int(amount)
             the_org = str(organization)
-            print("------thedigits:", the_org)
             phone = "254720090889",
-            passkey = "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919"
+            passkey = PASSKEY
             business_short_code = '174379'
             process_request_url = 'https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest'
             callback_url = 'https://sj76vr3h-8000.euw.devtunnels.ms/' # replace with your own url - the route to be executed when user clicks send

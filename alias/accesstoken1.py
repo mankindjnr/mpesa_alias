@@ -5,10 +5,9 @@ from decouple import config
 CONSUMER_KEY = config('CONSUMER_KEY')
 CONSUMER_SECRET = config('CONSUMER_SECRET')
 
-def get_access_token(request):
+def get_access_token():
     consumer_key = CONSUMER_KEY
     consumer_secret = CONSUMER_SECRET
-
     access_token_url = 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials'
     headers = {'Content-Type': 'application/json'}
     auth = (consumer_key, consumer_secret)
@@ -20,3 +19,5 @@ def get_access_token(request):
         return JsonResponse({'access_token': access_token})
     except requests.exceptions.RequestException as e:
         return JsonResponse({'error': str(e)})
+
+get_access_token()

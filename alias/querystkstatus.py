@@ -4,6 +4,9 @@ import base64
 from datetime import datetime
 from django.http import JsonResponse
 from .generateAccessToken import get_access_token
+from decouple import config
+
+PASSKEY = config('PASSKEY')
 
 def query_stk_status(request, checkoutid):
     access_token_response = get_access_token(request)
@@ -15,7 +18,7 @@ def query_stk_status(request, checkoutid):
             query_url = 'https://sandbox.safaricom.co.ke/mpesa/stkpushquery/v1/query'
             business_short_code = '174379'
             timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
-            passkey = "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919"
+            passkey = PASSKEY
             password = base64.b64encode((business_short_code + passkey + timestamp).encode()).decode()
             checkoutid = str(checkoutid)
             checkout_request_id = checkoutid
